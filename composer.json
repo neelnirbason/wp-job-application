@@ -1,0 +1,19 @@
+{
+  "name": "devkabir/wp-job-application",
+  "description": "A lightweight plugin for handling job applications",
+  "minimum-stability": "stable",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Dev Kabir",
+      "email": "dev.kabir01@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "DevKabir\\Application\\": "core/",
+      "DevKabir\\Admin\\": "admin/",
+      "DevKabir\\Web\\": "web/"
+    }
+  }
+}

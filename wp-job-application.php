@@ -1,11 +1,64 @@
 <?php
 
+/**
+ * The plugin bootstrap file
+ *
+ * This file is read by WordPress to generate the plugin information in the plugin
+ * admin area. This file also includes all of the dependencies used by the plugin,
+ * registers the activation and deactivation functions, and defines a function
+ * that starts the plugin.
+ *
+ * @link              https://devkabir.shop
+ * @since             1.0.0
+ * @package           WP_Job_Application
+ *
+ * @wordpress-plugin
+ * Plugin Name:       Job Application for WordPress
+ * Plugin URI:        https://github.com/devkabir/wp-job-application
+ * Description:       A lightweight plugin for handling job applications
+ * Version:           1.0.0
+ * Author:            Dev Kabir
+ * Author URI:        https://devkabir.shop
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       wp-job-application
+ * Domain Path:       /languages
+ */
 /*
-Plugin Name: Wp Job Application
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
-Description: A brief description of the Plugin.
-Version: 1.0
-Author: devkabir
-Author URI: http://URI_Of_The_Plugin_Author
-License: A "Slug" license name e.g. GPL2
-*/
+|--------------------------------------------------------------------------
+| If this file is called directly, abort.
+|--------------------------------------------------------------------------
+ */
+
+use DevKabir\Application\Activated;
+use DevKabir\Application\Deactivated;
+
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Register autoloader
+|--------------------------------------------------------------------------
+ */
+require "vendor/autoload.php";
+/*
+|--------------------------------------------------------------------------
+| The code that runs during plugin activation
+|--------------------------------------------------------------------------
+ */
+register_activation_hook( __FILE__, [ Activated::class, 'init' ] );
+
+/*
+|--------------------------------------------------------------------------
+| The code that runs during plugin deactivation
+|--------------------------------------------------------------------------
+ */
+register_deactivation_hook( __FILE__, [ Deactivated::class, 'init' ] );
+/*
+|--------------------------------------------------------------------------
+| Start the plugin
+|--------------------------------------------------------------------------
+ */
+( new DevKabir\Application\WP_Job_Application() )->start();
