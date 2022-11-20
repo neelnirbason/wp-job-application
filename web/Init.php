@@ -3,9 +3,10 @@
 
 namespace DevKabir\Web;
 
+use DevKabir\Application\Loader;
 
 class Init {
 
-	public function run( \DevKabir\Application\Loader $loader ) {
+	public function run( Loader $loader ) {
 	}
 }

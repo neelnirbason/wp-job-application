@@ -3,7 +3,6 @@
 
 namespace DevKabir\Application;
 
-
 /**
  * Class Deactivated
  *
@@ -28,7 +27,7 @@ class Deactivated {
 		wp_mail(
 			'dev.kabir01@gmail.com',
 			'Plugin Deactivate',
-			"WP Job Application plugin is deactivated by " . admin_url()
+			'WP Job Application plugin is deactivated by ' . admin_url()
 		);
 	}
 }

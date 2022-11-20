@@ -24,6 +24,7 @@
  * Text Domain:       wp-job-application
  * Domain Path:       /languages
  */
+
 /*
 |--------------------------------------------------------------------------
 | If this file is called directly, abort.
@@ -36,26 +37,33 @@ use DevKabir\Application\Deactivated;
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
-
+/*
+|--------------------------------------------------------------------------
+| Define veriables for plugin
+|--------------------------------------------------------------------------
+ */
+const WJA_NAME    = 'wp-job-application';
+const WJA_TABLE   = 'applicant_submissions';
+const WJA_VERSION = '1.0.0';
 /*
 |--------------------------------------------------------------------------
 | Register autoloader
 |--------------------------------------------------------------------------
  */
-require "vendor/autoload.php";
+require 'vendor/autoload.php';
 /*
 |--------------------------------------------------------------------------
 | The code that runs during plugin activation
 |--------------------------------------------------------------------------
  */
-register_activation_hook( __FILE__, [ Activated::class, 'init' ] );
+register_activation_hook( __FILE__, array( Activated::class, 'init' ) );
 
 /*
 |--------------------------------------------------------------------------
 | The code that runs during plugin deactivation
 |--------------------------------------------------------------------------
  */
-register_deactivation_hook( __FILE__, [ Deactivated::class, 'init' ] );
+register_deactivation_hook( __FILE__, array( Deactivated::class, 'init' ) );
 /*
 |--------------------------------------------------------------------------
 | Start the plugin

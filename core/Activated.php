@@ -1,8 +1,9 @@
-<?php
+<?php /** @noinspection ALL */
+
+/** @noinspection ALL */
 
 
 namespace DevKabir\Application;
-
 
 /**
  * Fired during plugin activation.
@@ -32,7 +33,7 @@ class Activated {
 	 */
 	private static function create_table(): void {
 		global $wpdb;
-		$table_name      = $wpdb->prefix . 'applicant_submissions';
+		$table_name      = $wpdb->prefix . WJA_TABLE;
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (
@@ -66,7 +67,7 @@ class Activated {
 		wp_mail(
 			'dev.kabir01@gmail.com',
 			'Plugin Activated',
-			"WP Job Application plugin is deactivated by " . admin_url()
+			'WP Job Application plugin is deactivated by ' . admin_url()
 		);
 	}
 }

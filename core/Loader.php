@@ -3,7 +3,6 @@
 
 namespace DevKabir\Application;
 
-
 /**
  * Class Loader
  *
@@ -13,9 +12,7 @@ namespace DevKabir\Application;
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @property array  filter  The array of filters registered with WordPress.
- * @property string version Version of the plugin
- * @property string name    Unique identifier for the plugin
+ * @property array filter  The array of filters registered with WordPress.
  *
  * @package    DevKabir\Application
  * @author     Dev Kabir <dev.kabir01@gmail.com>
@@ -25,35 +22,12 @@ class Loader {
 	/**
 	 * Loader constructor.
 	 *
-	 * @param string $name The name of the plugin
-	 * @param string $version The version of the plugin
 	 */
-	public function __construct( string $name, string $version ) {
-		$this->name    = $name;
-		$this->version = $version;
-		$this->filter  = [];
+	public function __construct() {
+
+		$this->filter = array();
 	}
 
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The name of the plugin.
-	 */
-	final public function get_name(): string {
-		return $this->name;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since     1.0.0
-	 * @return    string    The version number of the plugin.
-	 */
-	final public function get_version(): string {
-		return $this->version;
-	}
 
 	/**
 	 * Adds a callback function to an action hook.
@@ -76,7 +50,7 @@ class Loader {
 	 *
 	 */
 	final public function add_filter( string $hook_name, callable $callback, int $priority = 10, int $arguments = 1 ): void {
-		$this->filter[] = [ $hook_name, $callback, $priority, $arguments ];
+		$this->filter[] = array( $hook_name, $callback, $priority, $arguments );
 	}
 
 	/**

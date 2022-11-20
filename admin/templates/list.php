@@ -3,7 +3,8 @@
 	<!-- Forms are NOT created automatically, so you need to wrap the table in one to use features like bulk actions -->
 	<form id="application-filter" method="post">
 		<!-- For plugins, we also need to ensure that the form posts back to our current page -->
-		<input type="hidden" name="page" value="<?php echo $_REQUEST['page']; ?>" />
+		<input type="hidden" name="page" value="<?php echo $_REQUEST['page']; ?>"/>
+		<?php wp_nonce_field( 'submission-list-table' ); ?>
 		<!-- Now we can render the completed list table -->
 		<?php
 		$list->search_box( 'search', 'search_id' );
