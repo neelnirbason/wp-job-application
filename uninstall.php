@@ -21,3 +21,10 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+/*
+|--------------------------------------------------------------------------
+| Remove table from database.
+|--------------------------------------------------------------------------
+ */
+global $wpdb;
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}applicant_submissions" );
