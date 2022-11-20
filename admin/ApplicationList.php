@@ -80,14 +80,24 @@ class ApplicationList extends WP_List_Table {
 	 */
 	final public function get_columns(): array {
 		return [
-			'cb'              => '<input type="checkbox">',
 			'name'            => __( 'Name', 'wp-job-application' ),
-			'address'         => __( 'Address', 'wp-job-application' ),
 			'email'           => __( 'Email', 'wp-job-application' ),
 			'phone'           => __( 'Mobile No', 'wp-job-application' ),
 			'post'            => __( 'Post Name', 'wp-job-application' ),
+			'address'         => __( 'Address', 'wp-job-application' ),
 			'attachment'      => __( 'CV', 'wp-job-application' ),
-			'submission_date' => __( 'Submitted @', 'wp-job-application' ),
+			'submission_date' => __( 'Submitted at', 'wp-job-application' ),
+		];
+	}
+
+	/**
+	 * Define which column will be sortable.
+	 *
+	 * @return array[] column list.
+	 */
+	protected function get_sortable_columns(): array {
+		return [
+			'submission_date' => [ 'submission_date', true ],
 		];
 	}
 
@@ -98,7 +108,7 @@ class ApplicationList extends WP_List_Table {
 	 *
 	 * @return array
 	 */
-	private function generate_pagination( array $data ): array {
+	final private function generate_pagination( array $data ): array {
 		$current_page = $this->get_pagenum();
 		$total_items  = count( $data );
 		$data         = array_slice( $data, ( ( $current_page - 1 ) * 10 ), 10 );
@@ -117,7 +127,7 @@ class ApplicationList extends WP_List_Table {
 	 * @since 3.1.0
 	 */
 	final public function no_items(): void {
-		_e( 'No application submitted yet.' );
+		_e( 'No application found.' );
 	}
 
 	/**
@@ -140,15 +150,24 @@ class ApplicationList extends WP_List_Table {
 		return sprintf( '%1$s %2$s', $item['first_name'] . ' ' . $item['last_name'], $this->row_actions( $actions ) );
 	}
 
+
 	/**
-	 * Retrieves the list of bulk actions available for this table.
+	 * Render row data
 	 *
-	 * @return array
+	 * @param array  $item        single row data.
+	 * @param string $column_name current column name.
+	 *
+	 * @return string
 	 */
-	final protected function get_bulk_actions(): array {
-		return [
-			'delete_all' => __( 'Delete', 'wp-job-application' ),
-		];
+	protected final function column_default( $item, $column_name ): string {
+		switch ( $column_name ) {
+			case 'attachment':
+				return sprintf( '<a href=' . wp_get_attachment_url( $item['attachment_id'] ) . ' target="_blank">View</a>' );
+			case 'submission_date':
+				return date( 'M d, Y h:i a', strtotime( $item['submission_date'], time() ) );
+			default:
+				return $item[ $column_name ] ?? '-';
+		}
 	}
 
 	/**
@@ -159,7 +178,7 @@ class ApplicationList extends WP_List_Table {
 	 *
 	 * @return int
 	 */
-	private function usort_reorder( array $a, array $b ): int {
+	final private function usort_reorder( array $a, array $b ): int {
 		// If no sort, default to title.
 		$orderby = ! empty( $_REQUEST['orderby'] ) ? wp_unslash( $_REQUEST['orderby'] ) : 'submission_date'; // WPCS: Input var ok.
 

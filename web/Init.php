@@ -25,14 +25,14 @@ class Init {
 	 * @param \DevKabir\Application\Loader $loader register of all hooks and filters.
 	 */
 	final public function run( Loader $loader ): void {
-		$loader->add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		$loader->add_action( 'wp_enqueue_scripts', [ $this, 'register_scripts' ] );
 		new Application( $loader );
 	}
 
 	/**
 	 * Register styles and scripts for the website
 	 */
-	final public function enqueue_scripts(): void {
+	final public function register_scripts(): void {
 		wp_register_style( 'wp-job-application-shortcode', plugin_dir_url( __FILE__ ) . 'assets/styles.css', [], '1.0.0' );
 		wp_register_script( 'wp-job-application-shortcode', plugin_dir_url( __FILE__ ) . 'assets/scripts.js', [ 'jquery' ],
 			'1.0.0', false );

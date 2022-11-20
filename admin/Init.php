@@ -31,14 +31,23 @@ class Init {
 	 * @return void
 	 */
 	final public function run( Loader $loader ): void {
-		$loader->add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		$loader->add_action( 'admin_enqueue_scripts', [ $this, 'register_scripts' ] );
 		new Application( $loader );
 	}
 
 	/**
 	 * Register styles and scripts for the admin panel
 	 */
-	final public function enqueue_scripts(): void {
-		wp_enqueue_style( 'wp-job-application', plugin_dir_url( __FILE__ ) . 'assets/styles.css', [], '1.0.0' );
+	final public function register_scripts(): void {
+		wp_register_style( 'wp-job-application', plugin_dir_url( __FILE__ ) . 'assets/styles.css', [], '1.0.0' );
+		wp_register_script( 'wp-job-application', plugin_dir_url( __FILE__ ) . 'assets/scripts.js', [ 'jquery' ], '1.0
+		.0', false );
+		wp_localize_script( 'wp-job-application', 'wpja',
+			[
+				'url' => admin_url( 'admin-ajax.php' ),
+			]
+		);
+		wp_register_script( 'wp-job-application-notyf', 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js' );
+		wp_register_style( 'wp-job-application-notyf', 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css' );
 	}
 }

@@ -40,10 +40,10 @@ class WPJobApplication {
 		if ( ! is_admin() ) {
 			( new Web() )->run( $this->loader );
 		} else {
-			if ( wp_doing_ajax() ) {
-				( new Ajax() )->run( $this->loader );
-			} else {
+			if ( ! wp_doing_ajax() ) {
 				( new Admin() )->run( $this->loader );
+			} else {
+				( new Ajax() )->run( $this->loader );
 			}
 		}
 	}

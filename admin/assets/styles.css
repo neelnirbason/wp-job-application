@@ -1,0 +1,30 @@
+#application-filter > div.tablenav.top{
+    display: none !important;
+}
+#application-filter > p{
+    margin-bottom: 1em;
+}
+#application-filter > table > tfoot{
+    display: none !important;
+}
+
+#last-five-submission > div.inside{
+    padding: 0;
+    margin: 0;
+}
+#last-five-submission > div.inside > table{
+    border: none;
+}
+#name{
+    max-width: 7vw;
+}
+#attachment.manage-column.column-attachment, .attachment.column-attachment{
+    width: 3vw;
+    text-align: center;
+}
+#email.manage-column.column-email, .email.column-email{
+    width: 15vw;
+}
+
+
+

@@ -11,7 +11,6 @@ namespace DevKabir\Admin;
 
 
 use DevKabir\Application\Loader;
-use WP_Error;
 
 /**
  * Will be used for,
@@ -29,6 +28,7 @@ class Ajax {
 	 */
 	final public function run( Loader $loader ) {
 		$loader->add_action( 'wp_ajax_nopriv_store_application', [ $this, 'submission' ] );
+		$loader->add_action( 'wp_ajax_remove_application', [ $this, 'delete' ] );
 	}
 
 	/**
@@ -72,10 +72,26 @@ class Ajax {
 			'attachment_id' => $attachment_id
 		];
 		$result        = Application::store( $submission );
-		if ( ! $result instanceof WP_Error ) {
+		if ( false !== $result ) {
+			Application::notify($submission);
 			wp_send_json_success( __( 'Successfully submitted', 'wp-job-application' ) );
 		} else {
-			wp_send_json_error( $result->get_error_message() );
+			wp_send_json_error( __( 'Please check your information again', 'wp-job-application' ) );
+		}
+	}
+
+	/**
+	 * Processes ajax request from admin panel
+	 */
+	public function delete() {
+		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'delete-application' ) ) {
+			wp_send_json_error( __( 'Go, get some sleep!', 'wp-job-application' ) );
+		}
+		$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0 ;
+		if ( false === Application::delete( $id ) ) {
+			wp_send_json_error( __( 'Unable to remove', 'wp-job-application' ) );
+		} else {
+			wp_send_json_success( __( "Application deleted successfully", 'wp-job-application' ) );
 		}
 	}
 }
