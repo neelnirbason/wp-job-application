@@ -33,7 +33,7 @@
                         notyf.error("Server error");
                     }
 
-                }
+                },
             });
 
         });

@@ -20,6 +20,7 @@ use WP_List_Table;
  */
 class ApplicationList extends WP_List_Table {
 
+
 	/**
 	 * Application_List constructor.
 	 *
@@ -27,10 +28,10 @@ class ApplicationList extends WP_List_Table {
 	 */
 	public function __construct() {
 		parent::__construct(
-			[
+			array(
 				'plural'   => 'Applications',
 				'singular' => 'Application',
-			]
+			)
 		);
 	}
 
@@ -44,14 +45,16 @@ class ApplicationList extends WP_List_Table {
 	final public function prepare_items(): void {
 		$data                  = $this->filter_data();
 		$columns               = $this->get_columns();
-		$hidden                = [];
+		$hidden                = array();
 		$primary               = 'name';
 		$sortable              = $this->get_sortable_columns();
-		$headers               = [ $columns, $hidden, $sortable, $primary ];
+		$headers               = array( $columns, $hidden, $sortable, $primary );
 		$this->_column_headers = $headers;
-		usort( $data, [ &$this, 'usort_reorder' ] );
+		usort( $data, array( &$this, 'usort_reorder' ) );
 		/* pagination */
-		[ $data, $pagination ] = $this->generate_pagination( $data );
+		$paginations = $this->generate_pagination( $data );
+		$data        = $paginations[0];
+		$pagination  = $paginations[1];
 		$this->set_pagination_args( $pagination );
 		$this->items = $data;
 	}
@@ -63,6 +66,7 @@ class ApplicationList extends WP_List_Table {
 	 */
 	private function filter_data(): array {
 		if ( ! empty( $_POST ) && array_key_exists( 's', $_POST ) ) {
+
 			return Application::get( $_POST['s'] );
 		}
 
@@ -79,7 +83,7 @@ class ApplicationList extends WP_List_Table {
 	 * @since 3.1.0
 	 */
 	final public function get_columns(): array {
-		return [
+		return array(
 			'name'            => __( 'Name', 'wp-job-application' ),
 			'email'           => __( 'Email', 'wp-job-application' ),
 			'phone'           => __( 'Mobile No', 'wp-job-application' ),
@@ -87,7 +91,7 @@ class ApplicationList extends WP_List_Table {
 			'address'         => __( 'Address', 'wp-job-application' ),
 			'attachment'      => __( 'CV', 'wp-job-application' ),
 			'submission_date' => __( 'Submitted at', 'wp-job-application' ),
-		];
+		);
 	}
 
 	/**
@@ -96,9 +100,9 @@ class ApplicationList extends WP_List_Table {
 	 * @return array[] column list.
 	 */
 	protected function get_sortable_columns(): array {
-		return [
-			'submission_date' => [ 'submission_date', true ],
-		];
+		return array(
+			'submission_date' => array( 'submission_date', true ),
+		);
 	}
 
 	/**
@@ -108,17 +112,17 @@ class ApplicationList extends WP_List_Table {
 	 *
 	 * @return array
 	 */
-	final private function generate_pagination( array $data ): array {
+	private function generate_pagination( array $data ): array {
 		$current_page = $this->get_pagenum();
 		$total_items  = count( $data );
 		$data         = array_slice( $data, ( ( $current_page - 1 ) * 10 ), 10 );
-		$pagination   = [
+		$pagination   = array(
 			'total_items' => $total_items,                      // total number of items.
 			'per_page'    => 10,                                // items to show on a page.
 			'total_pages' => ceil( $total_items / 10 ),         // use ceil to round up.
-		];
+		);
 
-		return [ $data, $pagination ];
+		return array( $data, $pagination );
 	}
 
 	/**
@@ -138,14 +142,14 @@ class ApplicationList extends WP_List_Table {
 	 * @return string
 	 */
 	final public function column_name( array $item ): string {
-		$actions = [
+		$actions = array(
 			'delete' => sprintf(
 				"<a href=\"#\" data-id=\"%d\" data-nonce='%s' class='delete-submission'>%s</a>",
 				$item['id'],
 				wp_create_nonce( 'delete-application' ),
 				__( 'Delete', 'wp-job-application' )
 			),
-		];
+		);
 
 		return sprintf( '%1$s %2$s', $item['first_name'] . ' ' . $item['last_name'], $this->row_actions( $actions ) );
 	}
@@ -154,17 +158,17 @@ class ApplicationList extends WP_List_Table {
 	/**
 	 * Render row data
 	 *
-	 * @param array  $item        single row data.
+	 * @param array  $item single row data.
 	 * @param string $column_name current column name.
 	 *
 	 * @return string
 	 */
-	protected final function column_default( $item, $column_name ): string {
+	final protected function column_default( $item, $column_name ): string {
 		switch ( $column_name ) {
 			case 'attachment':
-				return sprintf( '<a href=' . wp_get_attachment_url( $item['attachment_id'] ) . ' target="_blank">View</a>' );
+				return '<a href=' . wp_get_attachment_url( $item['attachment_id'] ) . ' target="_blank">View</a>';
 			case 'submission_date':
-				return date( 'M d, Y h:i a', strtotime( $item['submission_date'], time() ) );
+				return date( 'M d, Y h:i a', strtotime( $item['submission_date'] ) );
 			default:
 				return $item[ $column_name ] ?? '-';
 		}
@@ -178,7 +182,7 @@ class ApplicationList extends WP_List_Table {
 	 *
 	 * @return int
 	 */
-	final private function usort_reorder( array $a, array $b ): int {
+	private function usort_reorder( array $a, array $b ): int {
 		// If no sort, default to title.
 		$orderby = ! empty( $_REQUEST['orderby'] ) ? wp_unslash( $_REQUEST['orderby'] ) : 'submission_date'; // WPCS: Input var ok.
 
@@ -188,6 +192,6 @@ class ApplicationList extends WP_List_Table {
 		// Determine sort order.
 		$result = strcmp( $a[ $orderby ], $b[ $orderby ] );
 
-		return ( 'asc' === $order ) ? $result : - $result;
+		return ( 'asc' === $order ) ? $result : -$result;
 	}
 }

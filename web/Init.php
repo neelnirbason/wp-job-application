@@ -9,7 +9,6 @@
 
 namespace DevKabir\Web;
 
-
 use DevKabir\Application\Loader;
 
 /**
@@ -22,10 +21,10 @@ class Init {
 	/**
 	 * Frontend related classes will be loaded
 	 *
-	 * @param \DevKabir\Application\Loader $loader register of all hooks and filters.
+	 * @param Loader $loader register of all hooks and filters.
 	 */
 	final public function run( Loader $loader ): void {
-		$loader->add_action( 'wp_enqueue_scripts', [ $this, 'register_scripts' ] );
+		$loader->add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 		new Application( $loader );
 	}
 
@@ -33,13 +32,20 @@ class Init {
 	 * Register styles and scripts for the website
 	 */
 	final public function register_scripts(): void {
-		wp_register_style( 'wp-job-application-shortcode', plugin_dir_url( __FILE__ ) . 'assets/styles.css', [], '1.0.0' );
-		wp_register_script( 'wp-job-application-shortcode', plugin_dir_url( __FILE__ ) . 'assets/scripts.js', [ 'jquery' ],
-			'1.0.0', false );
-		wp_localize_script( 'wp-job-application-shortcode', 'wpja',
-			[
+		wp_register_style( 'wp-job-application-shortcode', plugin_dir_url( __FILE__ ) . 'assets/styles.css', array(), '1.0.0' );
+		wp_register_script(
+			'wp-job-application-shortcode',
+			plugin_dir_url( __FILE__ ) . 'assets/scripts.js',
+			array( 'jquery' ),
+			'1.0.0',
+			false
+		);
+		wp_localize_script(
+			'wp-job-application-shortcode',
+			'wpja',
+			array(
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
-			]
+			)
 		);
 		wp_register_script( 'wp-job-application-notyf', 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js' );
 		wp_register_style( 'wp-job-application-notyf', 'https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css' );

@@ -14,7 +14,7 @@
  *
  * @since      1.0.0
  *
- * @package    WPJobApplication
+ * @package    Init
  */
 
 // If uninstall not called from WordPress, then exit.

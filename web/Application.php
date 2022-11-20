@@ -9,7 +9,6 @@
 
 namespace DevKabir\Web;
 
-
 use DevKabir\Application\Loader;
 
 /**
@@ -24,19 +23,19 @@ class Application {
 	/**
 	 * Application constructor.
 	 *
-	 * @param \DevKabir\Application\Loader $loader register of all hooks and filters.
+	 * @param Loader $loader register of all hooks and filters.
 	 */
 	final public function __construct( Loader $loader ) {
-		add_shortcode( 'applicant_form', [ $this, 'add' ] );
+		add_shortcode( 'applicant_form', array( $this, 'add' ) );
 		$this->render();
 	}
 
 	/**
 	 * Make a page for the application form
 	 */
-	final private function render() {
+	private function render(): void {
 		$slug = 'apply';
-		$page = [
+		$page = array(
 			'comment_status' => 'close',
 			'ping_status'    => 'close',
 			'post_author'    => get_current_user_id(),
@@ -45,7 +44,7 @@ class Application {
 			'post_status'    => 'publish',
 			'post_content'   => '[applicant_form]',
 			'post_type'      => 'page',
-		];
+		);
 		if ( ! get_page_by_path( $slug, OBJECT ) ) {
 			wp_insert_post( $page );
 		}
@@ -60,7 +59,7 @@ class Application {
 		wp_enqueue_script( 'wp-job-application-shortcode' );
 		wp_enqueue_script( 'wp-job-application-notyf' );
 		ob_start();
-		include dirname( __FILE__ ) . '/templates/form.php';
+		include __DIR__ . '/templates/form.php';
 
 		return ob_get_clean();
 	}

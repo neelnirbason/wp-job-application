@@ -19,14 +19,15 @@ use DevKabir\Web\Init as Web;
  * @property Loader loader
  * @package  DevKabir\Application
  */
-class WPJobApplication {
+class Init {
+
 
 
 	/**
 	 * WPJobApplication constructor.
 	 */
 	public function __construct() {
-		$this->loader = new Loader;
+		$this->loader = new Loader();
 		$this->load();
 	}
 
@@ -39,12 +40,10 @@ class WPJobApplication {
 	final public function load(): void {
 		if ( ! is_admin() ) {
 			( new Web() )->run( $this->loader );
+		} elseif ( ! wp_doing_ajax() ) {
+			( new Admin() )->run( $this->loader );
 		} else {
-			if ( ! wp_doing_ajax() ) {
-				( new Admin() )->run( $this->loader );
-			} else {
-				( new Ajax() )->run( $this->loader );
-			}
+			( new Ajax() )->run( $this->loader );
 		}
 	}
 

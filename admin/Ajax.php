@@ -9,7 +9,6 @@
 
 namespace DevKabir\Admin;
 
-
 use DevKabir\Application\Loader;
 
 /**
@@ -21,14 +20,15 @@ use DevKabir\Application\Loader;
  */
 class Ajax {
 
+
 	/**
 	 * Register ajax hooks
 	 *
-	 * @param \DevKabir\Application\Loader $loader Action and filter register.
+	 * @param Loader $loader Action and filter register.
 	 */
-	final public function run( Loader $loader ) {
-		$loader->add_action( 'wp_ajax_nopriv_store_application', [ $this, 'submission' ] );
-		$loader->add_action( 'wp_ajax_remove_application', [ $this, 'delete' ] );
+	final public function run( Loader $loader ): void {
+		$loader->add_action( 'wp_ajax_nopriv_store_application', array( $this, 'submission' ) );
+		$loader->add_action( 'wp_ajax_remove_application', array( $this, 'delete' ) );
 	}
 
 	/**
@@ -43,37 +43,36 @@ class Ajax {
 			wp_send_json_error( __( 'Nonce is invalid', 'wp-job-application' ) );
 		}
 
-
-		$allowed_extensions = [ 'pdf', 'doc', 'docx' ];
+		$allowed_extensions = array( 'pdf', 'doc', 'docx' );
 		$file_type          = wp_check_filetype( $_FILES['cv']['name'] );
 		$file_extension     = $file_type['ext'];
 		// Check for valid file extension.
-		if ( ! in_array( $file_extension, $allowed_extensions ) ) {
-			wp_send_json_error( __( 'File extension must be ' . join( ', ', $allowed_extensions ), 'wp-job-application' ) );
+		if ( ! in_array( $file_extension, $allowed_extensions, true ) ) {
+			$extensions = implode( ', ', $allowed_extensions );
+			wp_send_json_error( __( "File extension must be  $extensions", 'wp-job-application' ) );
 		}
 
-
 		// These files need to be included as dependencies when on the front end.
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once ABSPATH . 'wp-admin/includes/file.php';
 		$attachment_id = media_handle_upload( 'cv', 0 );
-		$firstName     = sanitize_text_field( $_POST['first_name'] );
-		$lastName      = sanitize_text_field( $_POST['last_name'] );
+		$first_name    = sanitize_text_field( $_POST['first_name'] );
+		$last_name     = sanitize_text_field( $_POST['last_name'] );
 		$address       = sanitize_text_field( $_POST['address'] );
 		$email         = sanitize_email( $_POST['email'] );
 		$phone         = sanitize_text_field( $_POST['phone'] );
-		$postName      = sanitize_text_field( $_POST['post_name'] );
-		$submission    = [
-			'first_name'    => $firstName,
-			'last_name'     => $lastName,
+		$post_name     = sanitize_text_field( $_POST['post_name'] );
+		$submission    = array(
+			'first_name'    => $first_name,
+			'last_name'     => $last_name,
 			'address'       => $address,
 			'email'         => $email,
 			'phone'         => $phone,
-			'post'          => $postName,
-			'attachment_id' => $attachment_id
-		];
+			'post'          => $post_name,
+			'attachment_id' => $attachment_id,
+		);
 		$result        = Application::store( $submission );
 		if ( false !== $result ) {
-			Application::notify($submission);
+			Application::notify( $submission );
 			wp_send_json_success( __( 'Successfully submitted', 'wp-job-application' ) );
 		} else {
 			wp_send_json_error( __( 'Please check your information again', 'wp-job-application' ) );
@@ -83,15 +82,15 @@ class Ajax {
 	/**
 	 * Processes ajax request from admin panel
 	 */
-	public function delete() {
+	public function delete(): void {
 		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'delete-application' ) ) {
 			wp_send_json_error( __( 'Go, get some sleep!', 'wp-job-application' ) );
 		}
-		$id = isset( $_REQUEST['id'] ) ? intval( $_REQUEST['id'] ) : 0 ;
+		$id = isset( $_REQUEST['id'] ) ? (int) $_REQUEST['id'] : 0;
 		if ( false === Application::delete( $id ) ) {
 			wp_send_json_error( __( 'Unable to remove', 'wp-job-application' ) );
 		} else {
-			wp_send_json_success( __( "Application deleted successfully", 'wp-job-application' ) );
+			wp_send_json_success( __( 'Application deleted successfully', 'wp-job-application' ) );
 		}
 	}
 }

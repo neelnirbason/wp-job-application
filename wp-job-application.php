@@ -9,7 +9,7 @@
  *
  * @link              https://devkabir.shop
  * @since             1.0.0
- * @package           WPJobApplication
+ * @package           Init
  *
  * @wordpress-plugin
  * Plugin Name:       Job Application for WordPress
@@ -32,7 +32,7 @@
 
 use DevKabir\Application\Activated;
 use DevKabir\Application\Deactivated;
-use DevKabir\Application\WPJobApplication;
+use DevKabir\Application\Init;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -50,18 +50,18 @@ require 'vendor/autoload.php';
 | The code that runs during plugin activation
 |--------------------------------------------------------------------------
  */
-register_activation_hook( __FILE__, [ Activated::class, 'init' ] );
+register_activation_hook( __FILE__, array( Activated::class, 'init' ) );
 
 /*
 |--------------------------------------------------------------------------
 | The code that runs during plugin deactivation
 |--------------------------------------------------------------------------
  */
-register_deactivation_hook( __FILE__, [ Deactivated::class, 'init' ] );
+register_deactivation_hook( __FILE__, array( Deactivated::class, 'init' ) );
 
 /*
 |--------------------------------------------------------------------------
 | Start the plugin
 |--------------------------------------------------------------------------
  */
-( new WPJobApplication )->start();
+( new Init() )->start();

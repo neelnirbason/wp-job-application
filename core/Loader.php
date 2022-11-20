@@ -28,7 +28,7 @@ class Loader {
 	 */
 	public function __construct() {
 
-		$this->actions = [];
+		$this->actions = array();
 	}
 
 
@@ -52,7 +52,7 @@ class Loader {
 	 * @since 1.0.0
 	 */
 	final public function add_action( string $hook_name, callable $callback, int $priority = 10, int $arguments = 1 ): void {
-		$this->actions[] = [ $hook_name, $callback, $priority, $arguments ];
+		$this->actions[] = array( $hook_name, $callback, $priority, $arguments );
 	}
 
 	/**
@@ -61,11 +61,14 @@ class Loader {
 	 * @since    1.0.0
 	 */
 	final public function run(): void {
-		add_action('plugins_loaded', function () {
-			foreach ( $this->actions as $action ) {
-				add_action( ...$action );
+		add_action(
+			'plugins_loaded',
+			function () {
+				foreach ( $this->actions as $action ) {
+					add_action( ...$action );
+				}
 			}
-		});
+		);
 	}
 
 

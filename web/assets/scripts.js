@@ -41,6 +41,10 @@
                             loading = false;
                         }
                     },
+                    error: function (request, status, error){
+                        notyf.error("Are you logged in?");
+                        notyf.success("This page is designed for visitors");
+                    }
                 });
             }
 
