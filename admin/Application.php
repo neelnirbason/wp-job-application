@@ -9,8 +9,8 @@
 
 namespace DevKabir\Admin;
 
-use DevKabir\Application\Loader;
 
+use DevKabir\Application\Loader;
 
 /**
  * Will handle,
@@ -28,7 +28,7 @@ class Application {
 	 * @param Loader $loader Action and filter register.
 	 */
 	public function __construct( Loader $loader ) {
-		$loader->add_filter( 'admin_menu', [ $this, 'register' ] );
+		$loader->add_action( 'admin_menu', [ $this, 'register' ] );
 	}
 
 	/**
@@ -57,14 +57,7 @@ class Application {
  					OR `post` LIKE %s
 					OR `attachment_id` LIKE %s
 					OR CAST(`submission_date` AS CHAR) LIKE %s',
-				$query,
-				$query,
-				$query,
-				$query,
-				$query,
-				$query,
-				$query,
-				$query
+				$query, $query, $query, $query, $query, $query, $query, $query
 			);
 		}
 		$sql .= ' ORDER BY id DESC';
@@ -74,6 +67,25 @@ class Application {
 		}
 
 		return $wpdb->get_results( $sql, ARRAY_A );
+	}
+
+	/**
+	 * Save application in database.
+	 *
+	 * @param array $submission A application submission.
+	 *
+	 * @since 1.0.0
+	 */
+	final public static function store( array $submission ) {
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'applicant_submissions';
+
+		return $wpdb->insert(
+			$table,
+			$submission,
+			[ '%s', '%s', '%s', '%s', '%s', '%s', '%d' ]
+		);
 	}
 
 	/**

@@ -9,8 +9,8 @@
 
 namespace DevKabir\Admin;
 
-use DevKabir\Application\Loader;
 
+use DevKabir\Application\Loader;
 
 /**
  * Will handle,
@@ -31,7 +31,7 @@ class Init {
 	 * @return void
 	 */
 	final public function run( Loader $loader ): void {
-		$loader->add_filter( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
+		$loader->add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		new Application( $loader );
 	}
 

@@ -15,7 +15,6 @@ use DevKabir\Application\Loader;
 /**
  * Will handle
  * 1. shortcode rendering
- * 2. shortcode ajax request
  * 3. insert a new application into database
  *
  * @subpackage DevKabir\Web\Application
@@ -57,9 +56,14 @@ class Application {
 	 */
 	final public function add() {
 		wp_enqueue_style( 'wp-job-application-shortcode' );
+		wp_enqueue_style( 'wp-job-application-notyf' );
+		wp_enqueue_script( 'wp-job-application-shortcode' );
+		wp_enqueue_script( 'wp-job-application-notyf' );
 		ob_start();
 		include dirname( __FILE__ ) . '/templates/form.php';
 
 		return ob_get_clean();
 	}
+
+
 }

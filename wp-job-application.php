@@ -32,6 +32,7 @@
 
 use DevKabir\Application\Activated;
 use DevKabir\Application\Deactivated;
+use DevKabir\Application\WPJobApplication;
 
 if ( ! defined( 'WPINC' ) ) {
 	die;
@@ -63,4 +64,4 @@ register_deactivation_hook( __FILE__, [ Deactivated::class, 'init' ] );
 | Start the plugin
 |--------------------------------------------------------------------------
  */
-( new DevKabir\Application\WPJobApplication() )->start();
+( new WPJobApplication )->start();

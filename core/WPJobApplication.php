@@ -9,6 +9,7 @@
 
 namespace DevKabir\Application;
 
+use DevKabir\Admin\Ajax;
 use DevKabir\Admin\Init as Admin;
 use DevKabir\Web\Init as Web;
 
@@ -25,7 +26,7 @@ class WPJobApplication {
 	 * WPJobApplication constructor.
 	 */
 	public function __construct() {
-		$this->loader = new Loader();
+		$this->loader = new Loader;
 		$this->load();
 	}
 
@@ -36,10 +37,14 @@ class WPJobApplication {
 	 * @since 1.0.0
 	 */
 	final public function load(): void {
-		if ( is_admin() ) {
-			( new Admin() )->run( $this->loader );
-		} else {
+		if ( ! is_admin() ) {
 			( new Web() )->run( $this->loader );
+		} else {
+			if ( wp_doing_ajax() ) {
+				( new Ajax() )->run( $this->loader );
+			} else {
+				( new Admin() )->run( $this->loader );
+			}
 		}
 	}
 

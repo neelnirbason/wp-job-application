@@ -16,7 +16,7 @@ namespace DevKabir\Application;
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @property array filter  The array of filters registered with WordPress.
+ * @property array $actions  The array of filters registered with WordPress.
  *
  * @subpackage    DevKabir\Application
  * @author     Dev Kabir <dev.kabir01@gmail.com>
@@ -28,7 +28,7 @@ class Loader {
 	 */
 	public function __construct() {
 
-		$this->filter = [];
+		$this->actions = [];
 	}
 
 
@@ -51,8 +51,8 @@ class Loader {
 	 *
 	 * @since 1.0.0
 	 */
-	final public function add_filter( string $hook_name, callable $callback, int $priority = 10, int $arguments = 1 ): void {
-		$this->filter[] = [ $hook_name, $callback, $priority, $arguments ];
+	final public function add_action( string $hook_name, callable $callback, int $priority = 10, int $arguments = 1 ): void {
+		$this->actions[] = [ $hook_name, $callback, $priority, $arguments ];
 	}
 
 	/**
@@ -62,8 +62,8 @@ class Loader {
 	 */
 	final public function run(): void {
 		add_action('plugins_loaded', function () {
-			foreach ( $this->filter as $filter ) {
-				add_filter( ...$filter );
+			foreach ( $this->actions as $action ) {
+				add_action( ...$action );
 			}
 		});
 	}
