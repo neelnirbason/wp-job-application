@@ -1,4 +1,11 @@
 <?php
+/**
+ * Core Class for this plugin
+ *
+ * @package    DevKabir\Admin
+ * @since      1.0.0
+ * @author     Dev Kabir <dev.kabir01@gmail.com>
+ */
 
 namespace DevKabir\Application;
 
@@ -6,16 +13,16 @@ use DevKabir\Admin\Init as Admin;
 use DevKabir\Web\Init as Web;
 
 /**
- * Class WP_Job_Application
+ * Class WPJobApplication
  *
  * @property Loader loader
  * @package  DevKabir\Application
  */
-class WP_Job_Application {
+class WPJobApplication {
 
 
 	/**
-	 * WP_Job_Application constructor.
+	 * WPJobApplication constructor.
 	 */
 	public function __construct() {
 		$this->loader = new Loader();

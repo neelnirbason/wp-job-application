@@ -1,6 +1,4 @@
 <?php
-
-
 /**
  * Fired when the plugin is uninstalled.
  *
@@ -14,10 +12,9 @@
  * - Repeat with other user roles. Best directly by using the links/query string parameters.
  * - Repeat things for multisite. Once for a single site in the network, once sitewide.
  *
- *
  * @since      1.0.0
  *
- * @package    WP_Job_Application
+ * @package    WPJobApplication
  */
 
 // If uninstall not called from WordPress, then exit.

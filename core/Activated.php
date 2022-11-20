@@ -1,19 +1,19 @@
-<?php /** @noinspection ALL */
-
-/** @noinspection ALL */
-
+<?php
+/**
+ *  Fired during plugin activation.
+ *
+ * @package    DevKabir\Application
+ * @since      1.0.0
+ * @author     Dev Kabir <dev.kabir01@gmail.com>
+ */
 
 namespace DevKabir\Application;
 
 /**
- * Fired during plugin activation.
- *
  * This class defines all code necessary to run during the plugin's activation.
  *
  * @since      1.0.0
- * @package    WP_Job_Application
- * @subpackage WP_Job_Application/core
- * @author     Dev Kabir <dev.kabir01@gmail.com>
+ * @subpackage DevKabir\Application\Activated
  */
 class Activated {
 	/**
@@ -33,7 +33,7 @@ class Activated {
 	 */
 	private static function create_table(): void {
 		global $wpdb;
-		$table_name      = $wpdb->prefix . WJA_TABLE;
+		$table_name      = $wpdb->prefix . 'applicant_submissions';
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$sql = "CREATE TABLE $table_name (

@@ -1,12 +1,16 @@
 <?php
-
+/**
+ * Register all actions and filters for the plugin.
+ *
+ * @package    DevKabir\Application
+ * @since      1.0.0
+ * @author     Dev Kabir <dev.kabir01@gmail.com>
+ */
 
 namespace DevKabir\Application;
 
 /**
  * Class Loader
- *
- * Register all actions and filters for the plugin.
  *
  * Maintain a list of all hooks that are registered throughout
  * the plugin, and register them with the WordPress API. Call the
@@ -14,18 +18,17 @@ namespace DevKabir\Application;
  *
  * @property array filter  The array of filters registered with WordPress.
  *
- * @package    DevKabir\Application
+ * @subpackage    DevKabir\Application
  * @author     Dev Kabir <dev.kabir01@gmail.com>
  */
 class Loader {
 
 	/**
 	 * Loader constructor.
-	 *
 	 */
 	public function __construct() {
 
-		$this->filter = array();
+		$this->filter = [];
 	}
 
 
@@ -47,10 +50,9 @@ class Loader {
 	 * @param int      $arguments       Optional. The number of arguments the function accepts. Default 1.
 	 *
 	 * @since 1.0.0
-	 *
 	 */
 	final public function add_filter( string $hook_name, callable $callback, int $priority = 10, int $arguments = 1 ): void {
-		$this->filter[] = array( $hook_name, $callback, $priority, $arguments );
+		$this->filter[] = [ $hook_name, $callback, $priority, $arguments ];
 	}
 
 	/**
@@ -59,9 +61,11 @@ class Loader {
 	 * @since    1.0.0
 	 */
 	final public function run(): void {
-		foreach ( $this->filter as $filter ) {
-			add_filter( ...$filter );
-		}
+		add_action('plugins_loaded', function () {
+			foreach ( $this->filter as $filter ) {
+				add_filter( ...$filter );
+			}
+		});
 	}
 
 

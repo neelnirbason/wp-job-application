@@ -1,29 +1,36 @@
 <?php
+/**
+ * WrodPress default last table for applications
+ *
+ * @package    DevKabir\Admin
+ * @since      1.0.0
+ * @author     Dev Kabir <dev.kabir01@gmail.com>
+ */
 
 namespace DevKabir\Admin;
 
 use WP_List_Table;
 
+
 /**
- * Class Submission_List
+ * Collect all application from database and show as table
  *
- * @property string name
- * @package DevKabir\Admin
+ * @subpackage DevKabir\Admin\ApplicationList
+ * @since      1.0.0
  */
-class Submission_List extends WP_List_Table {
+class ApplicationList extends WP_List_Table {
 
 	/**
-	 * Submission_List constructor.
-	 *
+	 * Application_List constructor.
 	 *
 	 * @since 1.0.0
 	 */
 	public function __construct() {
 		parent::__construct(
-			array(
+			[
 				'plural'   => 'Applications',
 				'singular' => 'Application',
-			)
+			]
 		);
 	}
 
@@ -37,27 +44,29 @@ class Submission_List extends WP_List_Table {
 	final public function prepare_items(): void {
 		$data                  = $this->filter_data();
 		$columns               = $this->get_columns();
-		$hidden                = array();
+		$hidden                = [];
 		$primary               = 'name';
 		$sortable              = $this->get_sortable_columns();
-		$headers               = array( $columns, $hidden, $sortable, $primary );
+		$headers               = [ $columns, $hidden, $sortable, $primary ];
 		$this->_column_headers = $headers;
-		usort( $data, array( &$this, 'usort_reorder' ) );
+		usort( $data, [ &$this, 'usort_reorder' ] );
 		/* pagination */
-		list( $data, $pagination ) = $this->generate_pagination( $data );
+		[ $data, $pagination ] = $this->generate_pagination( $data );
 		$this->set_pagination_args( $pagination );
 		$this->items = $data;
 	}
 
 	/**
+	 * Filter data by user input
+	 *
 	 * @return array filter data by user's query
 	 */
 	private function filter_data(): array {
 		if ( ! empty( $_POST ) && array_key_exists( 's', $_POST ) ) {
-			return Submissions::get( $_POST['s'] );
+			return Application::get( $_POST['s'] );
 		}
 
-		return Submissions::get();
+		return Application::get();
 	}
 
 	/**
@@ -68,23 +77,24 @@ class Submission_List extends WP_List_Table {
 	 *
 	 * @return array
 	 * @since 3.1.0
-	 *
 	 */
 	final public function get_columns(): array {
-		return array(
+		return [
 			'cb'              => '<input type="checkbox">',
-			'name'            => __( 'Name', WJA_NAME ),
-			'address'         => __( 'Address', WJA_NAME ),
-			'email'           => __( 'Email', WJA_NAME ),
-			'phone'           => __( 'Mobile No', WJA_NAME ),
-			'post'            => __( 'Post Name', WJA_NAME ),
-			'attachment'      => __( 'CV', WJA_NAME ),
-			'submission_date' => __( 'Submitted @', WJA_NAME ),
-		);
+			'name'            => __( 'Name', 'wp-job-application' ),
+			'address'         => __( 'Address', 'wp-job-application' ),
+			'email'           => __( 'Email', 'wp-job-application' ),
+			'phone'           => __( 'Mobile No', 'wp-job-application' ),
+			'post'            => __( 'Post Name', 'wp-job-application' ),
+			'attachment'      => __( 'CV', 'wp-job-application' ),
+			'submission_date' => __( 'Submitted @', 'wp-job-application' ),
+		];
 	}
 
 	/**
-	 * @param array $data Applications
+	 * Generates pagination data
+	 *
+	 * @param array $data Applications.
 	 *
 	 * @return array
 	 */
@@ -92,13 +102,13 @@ class Submission_List extends WP_List_Table {
 		$current_page = $this->get_pagenum();
 		$total_items  = count( $data );
 		$data         = array_slice( $data, ( ( $current_page - 1 ) * 10 ), 10 );
-		$pagination   = array(
-			'total_items' => $total_items,             // total number of items
-			'per_page'    => 10,                       // items to show on a page
-			'total_pages' => ceil( $total_items / 10 ), // use ceil to round up
-		);
+		$pagination   = [
+			'total_items' => $total_items,                      // total number of items.
+			'per_page'    => 10,                                // items to show on a page.
+			'total_pages' => ceil( $total_items / 10 ),         // use ceil to round up.
+		];
 
-		return array( $data, $pagination );
+		return [ $data, $pagination ];
 	}
 
 	/**
@@ -111,37 +121,41 @@ class Submission_List extends WP_List_Table {
 	}
 
 	/**
-	 * @param array $item
+	 * Add row meta in name column
+	 *
+	 * @param array $item Application.
 	 *
 	 * @return string
 	 */
 	final public function column_name( array $item ): string {
-		$actions = array(
+		$actions = [
 			'delete' => sprintf(
 				"<a href=\"#\" data-id=\"%d\" data-nonce='%s' class='delete-submission'>%s</a>",
 				$item['id'],
 				wp_create_nonce( 'delete-application' ),
-				__( 'Delete', WJA_NAME )
+				__( 'Delete', 'wp-job-application' )
 			),
-		);
+		];
 
 		return sprintf( '%1$s %2$s', $item['first_name'] . ' ' . $item['last_name'], $this->row_actions( $actions ) );
 	}
 
 	/**
+	 * Retrieves the list of bulk actions available for this table.
+	 *
 	 * @return array
 	 */
 	final protected function get_bulk_actions(): array {
-		return array(
-			'delete_all' => __( 'Delete', WJA_NAME ),
-		);
+		return [
+			'delete_all' => __( 'Delete', 'wp-job-application' ),
+		];
 	}
 
 	/**
 	 * Callback to allow sorting of  data.
 	 *
-	 * @param array $a First item
-	 * @param array $b Second item
+	 * @param array $a First item.
+	 * @param array $b Second item.
 	 *
 	 * @return int
 	 */
